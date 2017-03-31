@@ -1,0 +1,133 @@
+<html>
+
+    <head>
+
+     
+    </head>
+    <body>
+        
+
+        <form action="javascript:void(0)" onsubmit="app.salvar()">
+                <input type="text" id="item" placeholder="ITEM">                
+                <input type="number" id="valor" placeholder="VALOR">
+                <input type="submit" value="+">
+    
+        </form> 
+
+
+
+        <p id="contador"></p>
+        <table>
+                <tr>
+                
+                </tr>
+                <tbody id="mosite">
+
+                </tbody>    
+        </table>
+        <div>TOTAL:<input type="text" value="0" id="valortotal"></div>
+    </body>
+
+
+       <script>
+            
+               var app= new function(){
+                    
+                    this.ta = document.getElementById("mosite");
+                    this.listait=[];
+                    this.valores=[];
+                    this.nomes=[];
+                    this.itemEditar =-1;
+                    
+                    
+                    this.contar = function (qtd){
+                      //apenas para troca de nome
+                        var conta = document.getElementById("contador");
+                        var nome="Item";
+                        if (qtd){
+                            if (qtd>1){
+                                nome="Itens";
+                            }
+                           conta.innerHTML=qtd + ' '+ nome;
+                            
+                        }else {
+                            conta.innerHTML='Sem ' + nome;
+                        }
+                    } ;
+                    this.listarTodos = function(){
+                        
+                        var mostrar = '';
+                        for (i=0;i<this.listait.length;i++){
+                            mostrar+='<tr>';
+                            mostrar+='<td>'+this.listait[i]+'</td>';
+                            mostrar+='<td><button onclick="app.excluir('+i+')">excluir</button></td>';
+                            mostrar+='<td><button onclick="app.editar('+i+')">editar</button></td>';
+                          
+                            mostrar+="</tr>";
+                        }
+                        
+                        this.contar(this.listait.length);
+                        
+                        this.ta.innerHTML= mostrar;
+                    };
+                    this.excluir= function(item){
+                        var valor = this.valores[item];
+                          var total = Number(document.getElementById("valortotal").value);
+                          total = total - valor;
+                              document.getElementById("valortotal").value = total;
+                        this.listait.splice(item, 1);
+                        this.listarTodos();
+                    }
+                
+                    this.salvar=function(){
+                        
+                        var aux1 = document.getElementById("item");
+                        var aux2 = document.getElementById("valor");
+                        
+                        
+                        var item =  aux1.value;
+                        var valor =  Number(aux2.value);
+                      
+                     
+                        if(item){
+                                if(this.itemEditar==-1){
+                                    
+                                    this.listait.push(item+" "+valor);
+                                    this.nomes.push(item);
+                                    this.valores.push(valor);
+                                
+                                }else {
+                                   
+                                      this.listait.splice(this.itemEditar, 1, item.trim());  
+                                      this.itemEditar=-1;
+                                }
+                            var total = Number(document.getElementById("valortotal").value);
+                            total = total + valor;
+                            document.getElementById("valortotal").value = total;
+                                this.listarTodos();
+                                this.novo();
+                        
+                        
+                        }
+                     
+                    };
+                    this.novo=function(){
+                        this.itemEditar=-1;
+                        var item = document.getElementById("item");
+                        var valor = document.getElementById("valor");
+                        item.value="";
+                        valor.value="";
+                    }
+                
+                   
+                   
+                    
+                };
+                
+                
+            app.listarTodos();
+           
+        </script>
+
+
+</html>
